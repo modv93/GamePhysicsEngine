@@ -6,6 +6,7 @@ public class PhysicsEngine : MonoBehaviour {
 	public Vector3 velocityVector;
 	public Vector3 netForceVector;
 	public List<Vector3> forceVectorList = new List<Vector3>();
+	public float mass  = 10.0f;
 	// Use this for initialization
 	void Start () {
 		
@@ -17,13 +18,11 @@ public class PhysicsEngine : MonoBehaviour {
 	}
 	void FixedUpdate() {
 		AddForce ();
-		if (netForceVector == Vector3.zero) {
-			gameObject.transform.position = gameObject.transform.position + (velocityVector * Time.deltaTime);
-		} 
-		else {
-			Debug.LogError("Unbalanced force detected! ");
-		}
-			
+		UpdateVelocity ();
+
+		//Position is getting updated FixedUpdate (delta time multiplied by the accelaration)
+		gameObject.transform.position = gameObject.transform.position + (velocityVector * Time.deltaTime);
+				
 	}
 	void AddForce() {
 		netForceVector = Vector3.zero;
@@ -31,4 +30,9 @@ public class PhysicsEngine : MonoBehaviour {
 			netForceVector += forceVector;
 		}
 	}
+	void UpdateVelocity() {
+		Vector3 accelarationVector = netForceVector / mass;
+		velocityVector += accelarationVector * Time.deltaTime;
+	}
+
 }
