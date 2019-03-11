@@ -29,7 +29,7 @@ public class PhysicsEngine : MonoBehaviour {
 	void CalculateGravity() {
 		foreach (PhysicsEngine physicsEngineA in physicsEngineArray) {
 			foreach (PhysicsEngine physicsEngineB in physicsEngineArray) {
-				if (physicsEngineA != physicsEngineB) {
+				if (physicsEngineA != physicsEngineB && physicsEngineA != this) {
 					Vector3 distance = physicsEngineA.transform.position - physicsEngineB.transform.position;
 					float rSquared = Mathf.Pow (distance.magnitude, 2f);
 					float gravityMagnitude = gravitationConstant * physicsEngineA.mass * physicsEngineB.mass / rSquared;
