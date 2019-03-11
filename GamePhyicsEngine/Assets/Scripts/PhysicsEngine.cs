@@ -7,22 +7,37 @@ public class PhysicsEngine : MonoBehaviour {
 	public Vector3 velocityVector;	//	[m s^-1]
 	public Vector3 netForceVector;	//	[Kg m s^-1] N
 
+	private const float gravitationConstant = 6.674e-11f; // [m^3 Kg^-1 ms^-2]
 	private List<Vector3> forceVectorList = new List<Vector3>();
+	private PhysicsEngine[] physicsEngineArray;
 	// Use this for initialization
 	void Start () {
 		SetupThrustTrails();
+		physicsEngineArray = FindObjectsOfType<PhysicsEngine> ();
+	}
 
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	}
 	void FixedUpdate() {
 		RenderTrails ();
+		CalculateGravity ();
 		UpdatePosition ();
 	}
+
 	public void AddForces (Vector3 forceVector) {
 		forceVectorList.Add (forceVector);
+	}
+
+	void CalculateGravity() {
+		foreach (PhysicsEngine physicsEngineA in physicsEngineArray) {
+			foreach (PhysicsEngine physicsEngineB in physicsEngineArray) {
+				if (physicsEngineA != physicsEngineB) {
+					Vector3 distance = physicsEngineA.transform.position - physicsEngineB.transform.position;
+					float rSquared = Mathf.Pow (distance.magnitude, 2f);
+					float gravityMagnitude = gravitationConstant * physicsEngineA.mass * physicsEngineB.mass / rSquared;
+					Vector3 gravityFeltVector = gravityMagnitude * distance.normalized;
+					physicsEngineA.AddForces (-gravityFeltVector);
+				}
+			}
+		}
 	}
 	void UpdatePosition() {
 		// Summing the forces
