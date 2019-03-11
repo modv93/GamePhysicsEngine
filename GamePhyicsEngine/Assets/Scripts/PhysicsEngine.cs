@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PhysicsEngine : MonoBehaviour {
-	public Vector3 velocityVector;
-	public Vector3 netForceVector;
+	public float mass  = 10.0f;		//  [kg]
+	public Vector3 velocityVector;	//	[m s^-1]
+	public Vector3 netForceVector;	//	[Kg m s^-1] N
 
 	private List<Vector3> forceVectorList = new List<Vector3>();
-	public float mass  = 10.0f;
 	// Use this for initialization
 	void Start () {
 		SetupThrustTrails();
