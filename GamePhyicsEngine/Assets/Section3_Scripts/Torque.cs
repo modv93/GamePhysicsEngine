@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteInEditMode]
-public class ShowStats : MonoBehaviour {
-
+public class Torque : MonoBehaviour {
+	
+	public Vector3 torque;
+	public float torqueTime;
 	private Rigidbody rigidBody;
 	// Use this for initialization
 	void Start () {
@@ -12,8 +13,10 @@ public class ShowStats : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		Debug.Log (name + " inertia tensor" + rigidBody.inertiaTensor);
-		Debug.Log (name + " COM" + rigidBody.centerOfMass);
+	void FixedUpdate () {
+		if(torqueTime >= 0) {
+			rigidBody.AddTorque (torque);
+			torqueTime -= Time.fixedDeltaTime;
+		}
 	}
 }
